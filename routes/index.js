@@ -6,16 +6,26 @@ const todos = require('../models/express-models/todos');
 
 // GET /users
 router.get('/', (req, res, next) => {
-    res.send(todos.listPeople());
+    res.status(200).send(todos.listPeople());
 });
 
 // GET /users/:name/tasks
 router.get('/:name/tasks', (req, res) => {
     const name = req.params.name;
+    const search = todos.list(name);
     if( !todos.listPeople().includes(name) ) {
         res.status(404).send('Name does not exist.');
     }
-    res.send(todos.list(name));
+
+    if(req.query.status === 'complete') {
+        const complete = search.filter(task => task.complete === true);
+        res.status(200).send(complete);
+    } else if (req.query.status === 'active'){
+        const active = search.filter(task => task.complete !== true);
+        res.status(200).send(active);
+    }
+
+    res.status(200).send(search);
 });
 
 // POST /users/:name/tasks
@@ -45,7 +55,5 @@ router.delete('/:name/tasks/:index', (req, res) => {
     todos.remove(name, index);
     res.status(204).send(todos.list(name));
 });
-
-// router.get('/:name/tasks')
 
 module.exports = router;
