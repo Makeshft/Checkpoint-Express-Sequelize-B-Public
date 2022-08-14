@@ -12,7 +12,7 @@ const { Task, Owner } = require('../../models/sequelize-models');
  *
  */
 
-describe.only('Task and Owner', function () {
+describe('Task and Owner', function () {
   // clear the database before all tests
   before(() => {
     return db.sync({ force: true });
@@ -229,7 +229,7 @@ describe.only('Task and Owner', function () {
     });
 
     describe('beforeDestroy Instance Hook', function () {
-      xit("attempting to destroy owners named 'Grace Hopper' throws an error", async function () {
+      it("attempting to destroy owners named 'Grace Hopper' throws an error", async function () {
         const graceHopper = await Owner.findOne({
           where: {
             name: 'Grace Hopper',

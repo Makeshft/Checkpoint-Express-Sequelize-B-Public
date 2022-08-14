@@ -82,8 +82,14 @@ Owner.getOwnersAndTasks = async function() {
 };
 
 Owner.prototype.getIncompleteTasks = async function() {
-  return await Task.findAll({ include: Owner, where: { complete: false} })
-}
+  return await Task.findAll({ include: Owner, where: { complete: false} });
+};
+
+Owner.beforeDestroy((owner) => {
+  if (owner.name === 'Grace Hopper') {
+    throw new Error('Grace Hopper is the first row data point. It cannot be deleted');
+  };
+});
 
 //---------^^^---------  your code above  ---------^^^----------
 
